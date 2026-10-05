@@ -1,0 +1,21 @@
+# systemd service: keeps the bot running and sends tomorrow's hearings
+# every day at SEND_TIME (Asia/Kolkata, whatever the server's timezone is).
+#
+# Install:
+#   cp hearing-bot.service /etc/systemd/system/
+#   systemctl daemon-reload && systemctl enable --now hearing-bot
+[Unit]
+Description=ABI LAW FIRM hearing reminders on WhatsApp
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/hearing-bot
+ExecStart=/opt/hearing-bot/venv/bin/python main.py run
+Restart=always
+RestartSec=60
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
